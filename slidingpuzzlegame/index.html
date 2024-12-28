@@ -1,0 +1,128 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Puzzle Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="img-upload-container">
+          <img id="art" src="" alt="puzzle image" /><a id="download"></a>
+          <input
+            id="img_file"
+            type="file"
+            accept="image/png,image/gif,image/jpeg,image/webp"
+          />
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <div class="move-container">
+                  <p>Moves:</p>
+                  <div class="move"><span>0</span></div>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <button class="img-upload button" onclick="img_file.click()">
+                  Upload Image
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="size-container">
+                  <label for="size">Size:</label>
+                  <select id="size" name="size">
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="number-switch">
+                  <p>Numbers</p>
+                  <label class="switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button id="shuffle-btn" class="shuffle-btn button">
+                  <span>Shuffle</span>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button id="solve-btn" class="solve-btn button">
+                  <span>Solve</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="board-container">
+        <div id="board" class="board">
+          <!--populated by divs-->
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="./FastPriorityQueue.js"></script>
+    <script src="./boardstate.js"></script>
+    <script src="./solver.js"></script>
+    <script src="./script.js"></script>
+    <script>
+      let uploaded_image = null; //stores the previously uploaed image
+
+      var img_file = $("#img_file"),
+        img = $("#art"),
+        size_el = $("#size"),
+        checkbox_el = $("#checkbox"),
+        file,
+        url;
+      img_file.on("change", configure);
+      size_el.on("change", configure);
+
+      checkbox_el.on("click", check);
+      function check() {
+        $("#checkbox").is(":checked")
+          ? $(".number").css("visibility", "visible")
+          : $(".number").css("visibility", "hidden");
+      }
+
+      function configure() {
+        clearAllAnimation();
+        if (!img_file.prop("files")[0] && uploaded_image) return;
+        file = img_file.prop("files")[0]
+          ? img_file.prop("files")[0]
+          : uploaded_image;
+        uploaded_image = file;
+        url = file
+          ? window.URL.createObjectURL(file)
+          : uploaded_image
+          ? window.URL.createObjectURL(uploaded_image)
+          : null;
+        size = size_el.find(":selected").val();
+        img.src = url ?? DEFAULT_IMAGE;
+        updateBoard();
+        check();
+        $("#solve-btn").prop("disabled", size > 3 ? true : false);
+      }
+    </script>
+  </body>
+</html>
