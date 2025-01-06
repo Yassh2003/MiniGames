@@ -1,0 +1,24 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Candy Crush</title>
+    <link rel="stylesheet" href="candy.css" />
+    <script src="candy.js"></script>
+  </head>
+  <body>
+    <div id="scoreboard">
+      <h2>Score: <span id="score">0</span></h2>
+      <!-- <h2>Max Score: <span id="maxScore">0</span></h2> -->
+      <h2>Time Left: <span id="timer">50</span>s</h2>
+    </div>
+    <div id="board"></div>
+    <div id="gameOver" class="hidden">
+      <h1>Game Over!</h1>
+      <button id="restartButton">Restart Game</button>
+    </div>
+    <audio id="crushSound">
+      <source src="./crush.mp3" type="audio/mpeg" />
+    </audio>
+  </body>
+</html>
